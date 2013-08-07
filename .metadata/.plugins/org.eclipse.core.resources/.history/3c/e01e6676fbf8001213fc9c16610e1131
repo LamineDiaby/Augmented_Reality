@@ -1,0 +1,18 @@
+Fbx-Conversion log of C:\ImageBlender\commode1.fbx
+
+logfile-output: C:/ImageBlender/commode1.log
+fbx-output-path: C:/ImageBlender/
+file import started...
+file import done.
+
+found following animation name(s) during import:
+	Default Take	(frames 0-1)
+
+
+file export started...
+writing mfbx file...
+writing mfbx file done. [3 meshes][5448;681;4 vtx]
+creating zip package started...
+adding file to zip: commode1.mfbx
+creating zip package done.
+file export done.

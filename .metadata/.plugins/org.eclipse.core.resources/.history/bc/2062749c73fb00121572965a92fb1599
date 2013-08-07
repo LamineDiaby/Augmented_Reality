@@ -1,0 +1,209 @@
+// Copyright 2007-2013 metaio GmbH. All rights reserved.
+package com.valtech.projetikea;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+import com.metaio.sdk.ARViewActivity;
+import com.metaio.sdk.MetaioDebug;
+import com.metaio.sdk.jni.IGeometry;
+import com.metaio.sdk.jni.IMetaioSDKCallback;
+import com.metaio.sdk.jni.TrackingValuesVector;
+import com.metaio.sdk.jni.Vector3d;
+import com.metaio.tools.io.AssetsManager;
+
+public class Zone_Montage3 extends ARViewActivity 
+{
+
+	
+	
+	private IGeometry mJazz;
+	private IGeometry mMetaioMan;
+
+	String trackingConfigFile;
+	
+	private MetaioSDKCallbackHandler mCallbackHandler;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		mCallbackHandler = new MetaioSDKCallbackHandler();
+	}
+	
+	@Override
+	protected int getGUILayout() 
+	{
+		return R.layout.animation_multi_tacking; 
+	}
+
+	@Override
+	public void onDrawFrame() 
+	{
+		super.onDrawFrame();
+		
+		if (metaioSDK != null)
+		{
+			// get all detected poses/targets
+			TrackingValuesVector poses = metaioSDK.getTrackingValues();
+			
+			//if we have detected one, attach our metaio man to this coordinate system Id
+			if (poses.size() != 0)
+				mMetaioMan.setCoordinateSystemID(poses.get(0).getCoordinateSystemID());
+				
+		}
+	}
+
+	public void onButtonClick(View v)
+	{
+		super.onStop();
+		
+		MetaioDebug.log("Zone_Montage3.onStop()");
+		
+		if (mSurfaceView != null)
+		{
+			ViewGroup vg = (ViewGroup) findViewById(android.R.id.content);
+			vg.removeAllViews();
+		}
+		
+		System.runFinalization();
+		System.gc();
+	}
+	
+	
+	public void onMetaioManClick(View v)
+	{
+		mJazz.setVisible(false);
+		mMetaioMan.setVisible(true);
+	}
+	
+	public void onJazzManClick(View v)
+	{
+		mJazz.setVisible(true);
+		mMetaioMan.setVisible(false);
+
+	}
+	
+	
+	public void onIdButtonClick(View v)
+	{
+		trackingConfigFile = AssetsManager.getAssetPath("ZoneMontage3/Assets3/TrackingData_.xml");
+		MetaioDebug.log("Tracking Config path = "+trackingConfigFile);
+		
+		boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile); 
+		MetaioDebug.log("Id Marker tracking data loaded: " + result); 
+		mJazz.setScale(new Vector3d(2f, 2f, 2f));
+		mJazz.setVisible(true);
+		mMetaioMan.setVisible(false);
+	}
+	
+	public void onPictureButtonClick(View v)
+	{
+		trackingConfigFile = AssetsManager.getAssetPath("ZoneMontage3/Assets3/TrackingData_PictureMarker.xml");
+		MetaioDebug.log("Tracking Config path = "+trackingConfigFile);
+		
+		boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile); 
+		MetaioDebug.log("Picture Marker tracking data loaded: " + result); 
+		mMetaioMan.setScale(new Vector3d(8f, 8f, 8f));
+
+	}
+	
+	public void onMarkerlessButtonClick(View v)
+	{
+		trackingConfigFile = AssetsManager.getAssetPath("ZoneMontage3/Assets3/TrackingData_MarkerlessFast.xml");
+		MetaioDebug.log("Tracking Config path = "+trackingConfigFile);
+	
+		boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile); 
+		MetaioDebug.log("Markerless tracking data loaded: " + result); 
+		mJazz.setVisible(false);
+		mMetaioMan.setVisible(true);
+	}
+	
+	@Override
+	protected void loadContents() 
+	{
+		try
+		{
+			
+			// Load desired tracking data for planar marker tracking
+			trackingConfigFile = AssetsManager.getAssetPath("ZoneMontage3/Assets3/TrackingData_MarkerlessFast.xml");
+			
+			
+			boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile); 
+			MetaioDebug.log("Markerless tracking data loaded: " + result); 
+	        
+			// Load all the geometries. First - Model
+			String metaioManModel = AssetsManager.getAssetPath("ZoneMontage3/Assets3/metaioman.md2");			
+			if (metaioManModel != null) 
+			{
+				mMetaioMan = metaioSDK.createGeometry(metaioManModel);
+				if (mMetaioMan != null) 
+				{
+					// Set geometry properties
+					mMetaioMan.setScale(new Vector3d(2.0f, 2.0f, 2.0f));
+					MetaioDebug.log("Loaded geometry "+metaioManModel);
+					mMetaioMan.setVisible(true);
+				}
+				else
+					MetaioDebug.log(Log.ERROR, "Error loading geometry: "+metaioManModel);
+			}
+			
+			String jazzManModel = AssetsManager.getAssetPath("ZoneMontage3/Assets3/Jazz.md2");			
+			if (metaioManModel != null) 
+			{
+				mJazz = metaioSDK.createGeometry(jazzManModel);
+				if (mJazz != null) 
+				{
+					// Set geometry properties
+					mJazz.setScale(new Vector3d(2.0f, 2.0f, 2.0f));
+					MetaioDebug.log("Loaded geometry "+metaioManModel);
+					mJazz.setVisible(false);
+				}
+				else
+					MetaioDebug.log(Log.ERROR, "Error loading geometry: "+metaioManModel);
+			}
+		
+		}       
+		catch (Exception e)
+		{
+			
+		}
+	}
+	
+  
+	@Override
+	protected void onGeometryTouched(IGeometry geometry) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	protected IMetaioSDKCallback getMetaioSDKCallbackHandler() 
+	{
+		return mCallbackHandler;
+	}
+	
+	final class MetaioSDKCallbackHandler extends IMetaioSDKCallback 
+	{
+
+		@Override
+		public void onSDKReady() 
+		{
+			// show GUI
+			runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					mGUIView.setVisibility(View.VISIBLE);
+				}
+			});
+		}
+	}
+}

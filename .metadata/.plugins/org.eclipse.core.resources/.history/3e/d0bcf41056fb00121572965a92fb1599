@@ -1,0 +1,84 @@
+// Copyright 2007-2013 metaio GmbH. All rights reserved.
+package com.valtech.projetikea;
+
+import android.content.Intent;
+import android.util.Log;
+import android.view.View;
+
+import com.metaio.sdk.ARViewActivity;
+import com.metaio.sdk.MetaioDebug;
+import com.metaio.sdk.jni.IGeometry;
+import com.metaio.sdk.jni.IMetaioSDKCallback;
+import com.metaio.tools.io.AssetsManager;
+
+public class Zone_Montage1 extends ARViewActivity 
+{
+	private IGeometry mModel;
+
+	
+	@Override
+	protected int getGUILayout() 
+	{
+		// Attaching layout to the activity
+		return R.layout.validation_page; 
+	}
+
+
+	public void onButtonClick(View v) throws ClassNotFoundException
+	{
+		//final String montageId = url.substring(url.lastIndexOf("=") + 1);
+		super.onStop();
+		startActivity(new Intent(getApplicationContext(), Class.forName(getPackageName()+".Zone_Montage2")));		
+		//finish();
+	}
+	
+	
+	@Override
+	protected void loadContents() 
+	{
+		try
+		{
+			// Getting a file path for tracking configuration XML file
+			String trackingConfigFile = AssetsManager.getAssetPath("ZoneMontage1/Assets1/TrackingData_MarkerlessFast.xml");
+			
+			// Assigning tracking configuration
+			boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile); 
+			MetaioDebug.log("Tracking data loaded: " + result); 
+	        
+			// Getting a file path for a 3D geometry
+			String metaioManModel = AssetsManager.getAssetPath("ZoneMontage1/Assets1/frame.png");			
+			if (metaioManModel != null) 
+			{
+				// Loading 3D geometry
+				mModel = metaioSDK.createGeometryFromImage(metaioManModel);
+				if (mModel != null) 
+				{
+					// Set geometry properties
+					mModel.setScale(1.0f);
+					
+				}
+				else
+					MetaioDebug.log(Log.ERROR, "Error loading geometry: "+metaioManModel);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+
+	@Override
+	protected void onGeometryTouched(IGeometry geometry)
+	{
+		// Not used in this tutorial
+	}
+
+
+	@Override
+	protected IMetaioSDKCallback getMetaioSDKCallbackHandler()
+	{
+		// No callbacks needed in this tutorial
+		return null;
+	}	
+}

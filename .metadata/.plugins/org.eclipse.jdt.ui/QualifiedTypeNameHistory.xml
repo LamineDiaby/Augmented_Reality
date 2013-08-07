@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.metaio.Example.R"/>
+<fullyQualifiedTypeName name="com.metaio.sdk.SensorsComponentAndroid"/>
+<fullyQualifiedTypeName name="com.metaio.sdk.MetaioSurfaceView"/>
+<fullyQualifiedTypeName name="com.metaio.tools.io.AssetsManager"/>
+<fullyQualifiedTypeName name="com.metaio.sdk.jni.Vector3d"/>
+<fullyQualifiedTypeName name="com.valtech.plantestikea.R.layout"/>
+<fullyQualifiedTypeName name="com.metaio.sdk.MetaioDebug"/>
+<fullyQualifiedTypeName name="com.valtech.projetikea.R.layout"/>
+<fullyQualifiedTypeName name="android.view.View"/>
+<fullyQualifiedTypeName name="com.valtech.projetikea.Zone_Montage2.MetaioSDKCallbackHandler"/>
+<fullyQualifiedTypeName name="android.content.Intent"/>
+</qualifiedTypeNameHistroy>

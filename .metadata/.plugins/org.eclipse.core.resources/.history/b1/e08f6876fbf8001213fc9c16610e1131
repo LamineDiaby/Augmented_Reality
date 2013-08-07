@@ -1,0 +1,18 @@
+Fbx-Conversion log of C:\Users\mohamed.diaby\Desktop\vis.fbx
+
+logfile-output: C:/Users/mohamed.diaby/Desktop/vis.log
+fbx-output-path: C:/Users/mohamed.diaby/Desktop/
+file import started...
+file import done.
+
+found following animation name(s) during import:
+	Default Take	(frames 0-1)
+
+
+file export started...
+writing mfbx file...
+writing mfbx file done. [1 mesh][4423 vtx]
+creating zip package started...
+adding file to zip: vis.mfbx
+creating zip package done.
+file export done.

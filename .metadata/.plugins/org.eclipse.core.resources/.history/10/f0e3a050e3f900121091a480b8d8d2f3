@@ -1,0 +1,89 @@
+// Copyright Juin-Aoùt 2013 Valtech_. All rights reserved.
+package com.valtech.projetikea;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.metaio.Example.Tutorial2.MetaioSDKCallbackHandler;
+import com.metaio.sdk.ARViewActivity;
+import com.metaio.sdk.MetaioDebug;
+import com.metaio.sdk.jni.IGeometry;
+import com.metaio.sdk.jni.IMetaioSDKCallback;
+import com.metaio.sdk.jni.Vector3d;
+import com.metaio.tools.io.AssetsManager;
+
+public class Zone_Montage1 extends ARViewActivity
+{
+	private IGeometry mTitle;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		mTitle = null;
+		
+		mCallbackHandler = new MetaioSDKCallbackHandler();
+	}
+	
+	@Override
+	protected int getGUILayout() 
+	{
+		// Attaching layout to the activity
+		return R.layout.validation_page; 
+	}
+
+
+	public void onButtonClick(View v)
+	{
+		finish();	
+	}
+	
+	@Override
+	protected void loadContents() 
+	{
+		try
+		{
+			// Getting a file path for tracking configuration XML file
+			String trackingConfigFile = AssetsManager.getAssetPath("ZoneMontage1/Assets1/TrackingData_MarkerlessFast.xml");
+			
+			// Assigning tracking configuration
+			boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile); 
+			MetaioDebug.log("Tracking data loaded: " + result); 
+	        
+			// Getting a file path for a 3D geometry
+			String metaioManModel = AssetsManager.getAssetPath("ZoneMontage1/Assets1/PlanIkea.png");			
+			if (metaioManModel != null) 
+			{
+				// Loading 3D geometry
+				mTitle = metaioSDK.createGeometry(metaioManModel);
+				if (mTitle != null) 
+				{
+					// Set geometry properties
+					mTitle.setScale(new Vector3d(100.0f, 100.0f, 100.0f));
+					
+				}
+				else
+					MetaioDebug.log(Log.ERROR, "Error loading geometry: "+metaioManModel);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	protected void onGeometryTouched(IGeometry geometry)
+	{
+		// Not used in this tutorial
+	}
+
+	@Override
+	protected IMetaioSDKCallback getMetaioSDKCallbackHandler()
+	{
+		// No callbacks needed in this tutorial
+		return null;
+	}
+}

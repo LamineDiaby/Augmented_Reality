@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;ARViewActivity.java&apos; to &apos;PlanTestIkea/src/com.valtech.plantestikea&apos;&#x0D;&#x0A;- Original project: &apos;metaioSDK&apos;&#x0D;&#x0A;- Destination element: &apos;PlanTestIkea/src/com.valtech.plantestikea&apos;&#x0D;&#x0A;- Original element: &apos;com.metaio.sdk.ARViewActivity.java&apos;" description="Copy compilation unit" destination="=PlanTestIkea/src&lt;com.valtech.plantestikea" element1="/src&lt;com.metaio.sdk{ARViewActivity.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1373273820611" units="1" version="1.0"/>
+</session>
